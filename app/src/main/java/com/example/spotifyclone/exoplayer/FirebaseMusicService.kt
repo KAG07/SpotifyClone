@@ -5,6 +5,7 @@ import android.os.Build
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.MediaMetadataCompat.*
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
@@ -21,33 +22,32 @@ class FirebaseMusicService @Inject constructor(
     private val musicDatabase: MusicDatabase
 ) {
 
-    var songs= emptyList<MediaMetadata>()
+    var songs= emptyList<MediaMetadataCompat>()
 
     suspend fun fetchmetadata()= withContext(Dispatchers.IO){
-        state=State.STATE_INITIALISING
-        val allsongs=musicDatabase.getAllsongs()
-        songs=allsongs.map { song->
-            MediaMetadata.Builder()
-                .putString(MediaMetadata.METADATA_KEY_ARTIST, song.Subtitle)
-                .putString(MediaMetadata.METADATA_KEY_MEDIA_ID, song.mediaId)
-                .putString(MediaMetadata.METADATA_KEY_TITLE, song.title)
-                .putString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, song.title)
-                .putString(MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI, song.imageurl)
-                .putString(MediaMetadata.METADATA_KEY_MEDIA_URI, song.songurl)
-                .putString(MediaMetadata.METADATA_KEY_ALBUM_ART_URI, song.imageurl)
-                .putString(MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE, song.Subtitle)
-                .putString(MediaMetadata.METADATA_KEY_DISPLAY_DESCRIPTION, song.Subtitle)
+        state = State.STATE_INITIALISING
+        val allSongs = musicDatabase.getAllsongs()
+        songs = allSongs.map {song->
+            MediaMetadataCompat.Builder()
+                .putString(METADATA_KEY_ARTIST, song.Subtitle)
+                .putString(METADATA_KEY_MEDIA_ID, song.mediaId)
+                .putString(METADATA_KEY_TITLE, song.title)
+                .putString(METADATA_KEY_DISPLAY_TITLE, song.title)
+                .putString(METADATA_KEY_DISPLAY_ICON_URI, song.imageurl)
+                .putString(METADATA_KEY_MEDIA_URI, song.songurl)
+                .putString(METADATA_KEY_ALBUM_ART_URI, song.imageurl)
+                .putString(METADATA_KEY_DISPLAY_SUBTITLE, song.Subtitle)
+                .putString(METADATA_KEY_DISPLAY_DESCRIPTION, song.Subtitle)
                 .build()
-
         }
-        state=State.STATE_INITIALISED
+        state = State.STATE_INITIALISED
     }
 
    fun asMediaSource(datasourcefactory:DefaultDataSourceFactory):ConcatenatingMediaSource{
        val concatenatingMediaSOurce=ConcatenatingMediaSource()
        songs.forEach{song->
            val mediasource=ProgressiveMediaSource.Factory(datasourcefactory)
-               .createMediaSource(MediaItem.fromUri(song.getString(MediaMetadata.METADATA_KEY_MEDIA_URI).toUri()))
+               .createMediaSource(MediaItem.fromUri(song.getString(METADATA_KEY_MEDIA_URI).toUri()))
            concatenatingMediaSOurce.addMediaSource(mediasource)
        }
        return concatenatingMediaSOurce

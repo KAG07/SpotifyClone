@@ -3,7 +3,7 @@ package com.example.spotifyclone.exoplayer.callbacks
 import android.app.Notification
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import com.example.spotifyclone.data.others.Constants.NOTIFICATION_ID
+import com.example.spotifyclone.others.Constants.NOTIFICATION_ID
 import com.example.spotifyclone.exoplayer.MusicService
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
