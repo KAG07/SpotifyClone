@@ -29,7 +29,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setuprecycler()
         subscribetoobserver()
 
-        songAdapter.setOnItemClickListener {
+        songAdapter.setItemClickListener {
             mainViewModel.playortogglesong(it)
         }
     }

@@ -10,20 +10,19 @@ import com.bumptech.glide.RequestManager
 import com.example.spotifyclone.R
 import com.example.spotifyclone.data.entities.Song
 import kotlinx.android.synthetic.main.list_item.view.*
+import kotlinx.android.synthetic.main.list_item.view.tvPrimary
+import kotlinx.android.synthetic.main.swipe_item.view.*
 import javax.inject.Inject
 
-class SongAdapter @Inject constructor(
-    private val glide:RequestManager
-):BaseSongAdapter(R.layout.list_item){
+class SwipeSongAdapter:BaseSongAdapter(R.layout.swipe_item){
 
     override val differ=AsyncListDiffer<Song>(this,diffcallback)
 
     override fun onBindViewHolder(holder:SongViewholder, position: Int) {
         val song=songs[position]
         holder.itemView.apply {
-            tvPrimary.text = song.title
-            tvSecondary.text = song.Subtitle
-            glide.load(song.imageurl).into(ivItemImage)
+            val text1="${song.title}-${song.Subtitle}"
+            tvPrimary.text=text1
             setOnClickListener {
                 onItemClickListener?.let {
                     it(song)
